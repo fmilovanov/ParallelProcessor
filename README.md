@@ -73,6 +73,17 @@ process who locked it. Once you're done working with the resource - call
 Please note that if forgot to unlock, all other processes will be blocked trying
 to acquire the lock, and your script will be frozen. 
 
+Working with databases
+----------------------
+There is a trick when working with databases, or some other resources like 
+network connections, etc -- a resource that was created in a main process can
+not always be reused by children. Therefore, you need to create a new DB 
+connection or that other resource once your child process is created. Define a
+`childInit()` method in your class, and it will be called once you process is
+created, but before it runs any job. Respectfully, once all the jobs are 
+processed (and `completeJobs()`) was executed, this parallel processod will 
+call `childShutdown()` function is you need to close some resources before 
+finishing child process. 
 
 How many processed do I need?
 -----------------------------

@@ -36,11 +36,19 @@ abstract class ParallelProcessor
                 continue;
             }
 
+            // init a child, if needed
+            if (method_exists($this, 'childInit()'))
+                $this->childInit();
+
             // in a child - wait for jobs and execute them
             while(msg_receive($this->__mess_queue, 0, $msgtype, 16 * 1024, $data))
             {
                 $this->executeJob($data);
             }
+
+            // init a child, if needed
+            if (method_exists($this, 'childShutdown()'))
+                $this->childShutdown();
 
             // exit once message queue is destroyed - e.g. all jobs are processed
             exit();
