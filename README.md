@@ -77,12 +77,12 @@ Working with databases
 ----------------------
 There is a trick when working with databases, or some other resources like 
 network connections, etc -- a resource that was created in a main process can
-not always be reused by children. Therefore, you need to create a new DB 
-connection or that other resource once your child process is created. Define a
-`childInit()` method in your class, and it will be called once you process is
+not always be reused by children processes. Therefore, you need to create a new 
+DB  connection or that other resource once your child process is created. Define
+a `childInit()` method in your class, and it will be called once you process is
 created, but before it runs any job. Respectfully, once all the jobs are 
-processed (and `completeJobs()`) was executed, this parallel processod will 
-call `childShutdown()` function is you need to close some resources before 
+processed (and `completeJobs()` was executed), this parallel processor will 
+call `childShutdown()` function if you need to close some resources before 
 finishing child process. 
 
 How many processed do I need?
