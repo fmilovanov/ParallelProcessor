@@ -12,7 +12,7 @@ and with this library it it very simple to do so.
 How?
 ----
 First of all, parallel processing is not a panacea; it's won't speed up ANY
-task. In order to go parallel, you must break your task into JOBS: small 
+task. In order to go parallel, you must break your TASK into JOBS: small 
 pieces that can be completed independent of others. Once you broke your TASK
 into JOBS, you must derive a class from a `ParallelProcessor`:
 
@@ -28,8 +28,28 @@ into JOBS, you must derive a class from a `ParallelProcessor`:
         }
     }
 
+As you can see, the only function that we have (and we MUST have it) in our
+class is `executeJob()` - it will be called every time a processor is available
+and there is a JOB for it. In this example the job is simple - expect an int as
+a parameter, wait some time and print the parameter. 
 
+Here is how we execute it:
 
+    $printer = new Printer(10);
+
+    for ($i = 0; $i < 10; $i++)
+    {
+        $printer->runJob($i);
+    }
+
+    $printer->completeJobs();
+
+First we create our parallel process. The argument (10) is number or parallel 
+processes we want to run. Once it's created, we start feeding it with the jobs.
+Job is represented by a data what will be processed; in this case it's simple
+numbers, but it can be filenames, database IDs, whole object - anything, that
+can be serialized. This data will be packed in the main process, sent to one 
+of parallel processed and passed into `executeJob()` function. 
 
 
 How many processed do I need?
