@@ -19,7 +19,7 @@ relatively weak server (over 10 years ago).
 
 Licence
 -------
-BSD
+[BSD] (https://en.wikipedia.org/wiki/BSD_licenses)
 
 Author Information
 ------------------
