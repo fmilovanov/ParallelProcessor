@@ -13,11 +13,14 @@ abstract class ParallelProcessor
 
     public function __construct($nprocesses, $ipc_id = self::DEFAULT_IPC_ID)
     {
-        if (!function_exists('pcntl_fork()'))
-            throw new \Exception('pcntl_fork() not found; please, install library');
+        if (!function_exists('pcntl_fork'))
+            throw new \Exception('pcntl_fork() not found; please, install PCNTL library');
 
         if (!function_exists('msg_get_queue'))
             throw new \Exception('msg_get_queue() not found; please, install library');
+
+        if (!function_exists('sem_get'))
+            throw new \Exception('sem_get() not found; please, install library');
 
         // create message queue
         $this->__ipc_id = $ipc_id;
