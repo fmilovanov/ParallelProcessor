@@ -59,7 +59,7 @@ in parallel. Therefore, there is a synchronization mechanism. BEFORE you want
 to start doing something exclusive (e.g. writing into a file), call `lock()`
 method. It will lock your resource, or wait until it's unlocked by another 
 process who locked it. Once you're done working with the resource - call 
-`unlock()` method, and the resource will be available for other processes:
+`release()` method, and the resource will be available for other processes:
 
     protected function executeJob($data)
     {
@@ -67,7 +67,7 @@ process who locked it. Once you're done working with the resource - call
 
         $this->lock();
         fputs($file, $data);
-        $this->unlock();
+        $this->release();
     }
 
 Please note that if forgot to unlock, all other processes will be blocked trying
