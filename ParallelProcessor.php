@@ -9,6 +9,7 @@ abstract class ParallelProcessor
 
     private $__ipc_id;
     private $__mess_queue;
+    private $__semaphore;
     private $__processes;
 
     public function __construct($nprocesses, $ipc_id = self::DEFAULT_IPC_ID)
@@ -24,6 +25,7 @@ abstract class ParallelProcessor
 
         // create message queue
         $this->__ipc_id = $ipc_id;
+        $this->__semaphore = sem_get($this->__ipc_id);
         $this->__mess_queue = msg_get_queue($ipc_id);
 
         for ($i = 0; $i < $nprocesses; $i++)
@@ -47,12 +49,12 @@ abstract class ParallelProcessor
 
     protected function lock()
     {
-
+        sem_acquire($this->__semaphore);
     }
 
     protected function release()
     {
-
+        sem_release($this->__semaphore);
     }
 
     public function runJob($data)
@@ -82,6 +84,8 @@ abstract class ParallelProcessor
             if (array_key_exists($pid, $this->__processes))
                 unset($this->__processes[$pid]);
         }
+
+        sem_remove($this->__semaphore);
     }
 
     abstract protected function executeJob($data);

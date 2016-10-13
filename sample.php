@@ -12,7 +12,9 @@ class Printer extends ParallelProcessor
             return;
 
         usleep(500000 - $data * 50000);
+        $this->lock();
         print "$data\n";
+        $this->release();
     }
 }
 

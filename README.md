@@ -51,6 +51,28 @@ numbers, but it can be filenames, database IDs, whole object - anything, that
 can be serialized. This data will be packed in the main process, sent to one 
 of parallel processed and passed into `executeJob()` function. 
 
+Synchronization
+---------------
+Sometimes you need synchronize your jobs. An example would be you need to save 
+results to the same file; you don't want two processed to write into the file
+in parallel. Therefore, there is a synchronization mechanism. BEFORE you want
+to start doing something exclusive (e.g. writing into a file), call `lock()`
+method. It will lock your resource, or wait until it's unlocked by another 
+process who locked it. Once you're done working with the resource - call 
+`unlock()` method, and the resource will be available for other processes:
+
+    protected function executeJob($data)
+    {
+        // process data
+
+        $this->lock();
+        fputs($file, $data);
+        $this->unlock();
+    }
+
+Please note that if forgot to unlock, all other processes will be blocked trying
+to acquire the lock, and your script will be frozen. 
+
 
 How many processed do I need?
 -----------------------------
